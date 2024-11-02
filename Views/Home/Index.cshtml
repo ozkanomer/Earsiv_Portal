@@ -1,0 +1,153 @@
+﻿@{
+    ViewData["Title"] = "Sorgu Ekranı";
+}
+
+<style>
+    .centered-cell {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    /* Sayfalama butonlarının genel stilleri */
+    dir-pagination-controls {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+        font-family: Arial, sans-serif;
+    }
+
+        dir-pagination-controls ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 8px;
+        }
+
+        dir-pagination-controls li {
+            display: inline;
+        }
+
+            dir-pagination-controls li a {
+                padding: 8px 12px;
+                text-decoration: none;
+                color: #007bff;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                transition: background-color 0.3s, color 0.3s;
+            }
+
+                dir-pagination-controls li a:hover {
+                    background-color: #007bff;
+                    color: #fff;
+                }
+
+            dir-pagination-controls li.active a {
+                background-color: #007bff;
+                color: #fff;
+                border-color: #007bff;
+            }
+
+            dir-pagination-controls li.disabled a {
+                color: #ccc;
+                cursor: not-allowed;
+            }
+
+            /* Önceki ve Sonraki butonları */
+            dir-pagination-controls li a[ng-click*="prev"],
+            dir-pagination-controls li a[ng-click*="next"] {
+                font-weight: bold;
+                color: #555;
+            }
+
+                dir-pagination-controls li a[ng-click*="prev"]:hover,
+                dir-pagination-controls li a[ng-click*="next"]:hover {
+                    background-color: #eee;
+                    color: #333;
+                }
+
+</style>
+
+<!-- Tarih input alanları ve Sorgula butonu -->
+<div class="row" ng-controller="formController">
+    <div class="col-md-3">
+        <div class="form-group">
+            <label class="form-label">Başlangıç Tarihi</label>
+            <input class="form-control" type="date" name="startDate" ng-model="date.startDate" />
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            <label class="form-label">Bitiş Tarihi</label>
+            <input class="form-control" type="date" name="endDate" ng-model="date.endDate" />
+        </div>
+    </div>
+    <div class="col-md-2 d-flex justify-content-center align-items-end">
+        <button type="button" class="btn btn-info" ng-click="getData(date)">
+            Sorgula <i class="fa fa-search"></i>
+        </button>
+    </div>
+</div>
+
+<!-- Görüntüle ve Yazdır butonları -->
+<div class="row mt-2 justify-content-between" ng-controller="buttonController">
+    <div class="col-md-8 d-flex justify-content-start align-items-end align-content-end">
+        <button class="btn btn-sm btn-warning" style="width: 105px; height: 40px !important;" ng-click="belgeGoruntule()">
+            Görüntüle <i class="fa fa-eye"></i>
+        </button>
+
+        <button class="btn btn-sm btn-primary mx-2" style="width: 105px; height: 40px !important;" ng-click="belgeYazdir()">
+            Yazdır <i class="fa fa-print"></i>
+        </button>
+
+        <button class="btn btn-secondary" style="width: 105px; height: 40px !important;" ng-click="belgeIndir()">
+            İndir <i class="fa fa-download"></i>
+        </button>
+    </div>
+    <div class="col-md-4 d-flex justify-content-end">
+        <div class="form-group">
+            <label class="form-label">Arama</label>
+            <input id="searchBox" class="form-control" type="text" placeholder="Belge Ara..." ng-model="searchKey" ng-keyup="belgeAra()"/>
+        </div>
+    </div>
+</div>
+
+<!-- Tablo İçeriği -->
+<div class="row mt-2" ng-controller="tableController">
+    <table class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th>
+                    <input type="checkbox" class="form-check"/>
+                </th>
+                <th>Belge Numarası</th>
+                <th>Alıcı VKN/TCKN</th>
+                <th>Alıcı Ünvan/Ad Soyad</th>
+                <th>Düzenlenme Tarihi</th>
+                <th>Belge Türü</th>
+                <th>Onaylı</th>
+                <th>İptal/İtiraz Durumu</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr dir-paginate="belge in FiltreliBelgeListesi | itemsPerPage: 10" pagination-id="belgePagination">
+                <td>
+                    <input id="belge_{{belge.belgeNumarasi}}" name="{{belge.ettn}}" type="checkbox" class="form-check belge-check" />
+                </td>
+                <td>{{belge.belgeNumarasi}}</td>
+                <td>{{belge.aliciVknTckn}}</td>
+                <td>{{belge.aliciUnvanAdSoyad}}</td>
+                <td>{{belge.belgeTarihi}}</td>
+                <td>{{belge.belgeTuru}}</td>
+                <td class="centered-cell"><button class="btn btn-sm btn-secondary disabled" disabled><i class="fa fa-{{belge.onayDurumu}}"></i></button></td>
+                <td class="centered-cell">--------</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <dir-pagination-controls max-size="5"
+                             direction-links="true"
+                             boundary-links="true"
+                             pagination-id="belgePagination">
+    </dir-pagination-controls>
+</div>
