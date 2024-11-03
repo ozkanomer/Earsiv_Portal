@@ -14,6 +14,7 @@ Earsiv Portal, e-fatura süreçlerini yönetmek ve belge görüntüleme işlemle
 - **jQuery**: DOM manipülasyonu ve AJAX işlemleri için kullanılır.
 - **Toastr.js**: Kullanıcıya bildirimler göstermek için kullanılan bir kütüphane.
 - **Angular-Sanitize**: Kullanıcı tarafından sağlanan HTML içeriğini güvenli hale getirmek için kullanılır.
+- **.NET Core 8.0**: Uygulamanın arka plan kısmını oluşturur.
 
 ## Proje Modülleri
 
