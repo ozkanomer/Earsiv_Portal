@@ -1,4 +1,7 @@
-﻿namespace Earsiv_Portal.Services
+﻿using Microsoft.AspNetCore.Authentication;
+using System.Text.Json;
+
+namespace Earsiv_Portal.Services
 {
     public class EarsivService
     {
@@ -178,11 +181,18 @@
                 // HTTPClient ile POST İşlemi
                 var result = await httpClient.PostAsync("https://earsivportaltest.efatura.gov.tr/earsiv-services/dispatch", formIcerik);
 
+                // Otomatik Çıkış işlemi
+                await Logout(token);
+
                 // Eğer istek gönderimi başarılı ise
                 if (result.IsSuccessStatusCode)
                 {
                     var resultContent = await result.Content.ReadAsStringAsync();
-                    return new Tuple<int, string>(3, resultContent);
+                    using (JsonDocument doc = JsonDocument.Parse(resultContent))
+                    {
+                        var content = doc.RootElement.GetProperty("data").GetString();
+                        return new Tuple<int, string>(3, content);
+                    }
                 }
                 else
                 {

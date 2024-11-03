@@ -2,72 +2,6 @@
     ViewData["Title"] = "Sorgu Ekranı";
 }
 
-<style>
-    .centered-cell {
-        text-align: center;
-        vertical-align: middle;
-    }
-
-    /* Sayfalama butonlarının genel stilleri */
-    dir-pagination-controls {
-        display: flex;
-        justify-content: center;
-        margin-top: 20px;
-        font-family: Arial, sans-serif;
-    }
-
-        dir-pagination-controls ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            gap: 8px;
-        }
-
-        dir-pagination-controls li {
-            display: inline;
-        }
-
-            dir-pagination-controls li a {
-                padding: 8px 12px;
-                text-decoration: none;
-                color: #007bff;
-                border: 1px solid #ddd;
-                border-radius: 4px;
-                transition: background-color 0.3s, color 0.3s;
-            }
-
-                dir-pagination-controls li a:hover {
-                    background-color: #007bff;
-                    color: #fff;
-                }
-
-            dir-pagination-controls li.active a {
-                background-color: #007bff;
-                color: #fff;
-                border-color: #007bff;
-            }
-
-            dir-pagination-controls li.disabled a {
-                color: #ccc;
-                cursor: not-allowed;
-            }
-
-            /* Önceki ve Sonraki butonları */
-            dir-pagination-controls li a[ng-click*="prev"],
-            dir-pagination-controls li a[ng-click*="next"] {
-                font-weight: bold;
-                color: #555;
-            }
-
-                dir-pagination-controls li a[ng-click*="prev"]:hover,
-                dir-pagination-controls li a[ng-click*="next"]:hover {
-                    background-color: #eee;
-                    color: #333;
-                }
-
-</style>
-
 <!-- Tarih input alanları ve Sorgula butonu -->
 <div class="row" ng-controller="formController">
     <div class="col-md-3">
@@ -110,6 +44,24 @@
             <input id="searchBox" class="form-control" type="text" placeholder="Belge Ara..." ng-model="searchKey" ng-keyup="belgeAra()"/>
         </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="documentModal" tabindex="-1" role="dialog" aria-labelledby="documentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="documentModalLabel">Belge Görüntüleme</h5>
+                </div>
+                <div class="modal-body" ng-bind-html="modalHtmlContent">
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" ng-click="closeModal()">Kapat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <!-- Tablo İçeriği -->
@@ -151,3 +103,5 @@
                              pagination-id="belgePagination">
     </dir-pagination-controls>
 </div>
+
+

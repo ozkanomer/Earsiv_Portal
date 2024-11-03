@@ -6,6 +6,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
 builder.Services.AddTransient<EarsivService>();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Session süresi, 30 dakika
+    options.Cookie.HttpOnly = true; // Güvenlik için sadece Http üzerinden eriþilebilir
+    options.Cookie.IsEssential = true; // GDPR ve benzeri gereksinimler için önemli
+});
 
 var app = builder.Build();
 
@@ -20,6 +26,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseSession();
 
 app.UseAuthorization();
 
